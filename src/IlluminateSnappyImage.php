@@ -1,15 +1,22 @@
 <?php namespace Barryvdh\Snappy;
 
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Knp\Snappy\Image;
 use Illuminate\Filesystem\Filesystem;
 
-class IlluminateSnappyImage extends Image {
+class IlluminateSnappyImage extends Image
+{
+    /**
+     * @var Filesystem
+     */
+    private $fs;
 
-	/**
-	 * @param \Illuminate\Filesystem\Filesystem
+    /**
+     * @param Filesystem $fs
      * @param string $binary
      * @param array $options
-	 */
+     * @param array $env
+     */
 	public function __construct(Filesystem $fs, $binary, array $options, array $env)
 	{
 		parent::__construct($binary, $options, $env);
@@ -23,8 +30,9 @@ class IlluminateSnappyImage extends Image {
      * @param string $filename
      *
      * @return string
+     * @throws FileNotFoundException
      */
-    protected function getFileContents($filename)
+    protected function getFileContents(string $filename): string
     {
         return $this->fs->get($filename);
     }
@@ -36,7 +44,7 @@ class IlluminateSnappyImage extends Image {
      *
      * @return boolean
      */
-    protected function fileExists($filename)
+    protected function fileExists(string $filename): bool
     {
         return $this->fs->exists($filename);
     }
@@ -48,7 +56,7 @@ class IlluminateSnappyImage extends Image {
      *
      * @return boolean
      */
-    protected function isFile($filename)
+    protected function isFile(string $filename): bool
     {
         return $this->fs->isFile($filename);
     }
@@ -60,7 +68,7 @@ class IlluminateSnappyImage extends Image {
      *
      * @return integer or FALSE on failure
      */
-    protected function filesize($filename)
+    protected function filesize(string $filename): int
     {
         return $this->fs->size($filename);
     }
@@ -72,7 +80,7 @@ class IlluminateSnappyImage extends Image {
      *
      * @return boolean
      */
-    protected function unlink($filename)
+    protected function unlink(string $filename): bool
     {
         return $this->fs->delete($filename);
     }
@@ -84,7 +92,7 @@ class IlluminateSnappyImage extends Image {
      *
      * @return boolean
      */
-    protected function isDir($filename)
+    protected function isDir(string $filename): bool
     {
         return $this->fs->isDirectory($filename);
     }
@@ -96,7 +104,7 @@ class IlluminateSnappyImage extends Image {
      *
      * @return boolean
      */
-    protected function mkdir($pathname)
+    protected function mkdir(string $pathname): bool
     {
         return $this->fs->makeDirectory($pathname, 0777, true, true);
     }

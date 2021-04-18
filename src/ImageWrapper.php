@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class ImageWrapper {
 
 	/**
-     * @var \Knp\Snappy\Image
+     * @var SnappyImage
      */
     protected $snappy;
 
@@ -25,7 +25,7 @@ class ImageWrapper {
 
 
     /**
-     * @param \Knp\Snappy\Image $snappy
+     * @param SnappyImage $snappy
      */
     public function __construct(SnappyImage $snappy)
     {
@@ -35,22 +35,33 @@ class ImageWrapper {
     /**
      * Get the Snappy instance.
      *
-     * @return \Knp\Snappy\Image
+     * @return SnappyImage
      */
     public function snappy()
     {
      return $this->snappy;
     }
 
+    /**
+     * @param $name
+     * @param $value
+     * @return $this
+     */
     public function setOption($name, $value)
     {
         $this->snappy->setOption($name, $value);
+
         return $this;
     }
 
+    /**
+     * @param $options
+     * @return $this
+     */
     public function setOptions($options)
     {
         $this->snappy->setOptions($options);
+
         return $this;
     }
 
@@ -133,7 +144,7 @@ class ImageWrapper {
      * Make the image downloadable by the user
      *
      * @param string $filename
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function download($filename = 'image.jpg')
     {
@@ -147,7 +158,7 @@ class ImageWrapper {
      * Return a response with the image to show in the browser
      *
      * @param string $filename
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function inline($filename = 'image.jpg')
     {
@@ -156,13 +167,13 @@ class ImageWrapper {
             'Content-Disposition' => 'inline; filename="'.$filename.'"',
         ));
     }
-    
+
     /**
      * Return a response with the image to show in the browser
      *
-     * @deprecated Use inline() instead
      * @param string $filename
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return StreamedResponse
+     * @deprecated Use inline() instead
      */
     public function stream($filename = 'image.jpg')
     {
